@@ -24,15 +24,11 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<RequiredAuth/>}>
         <Route path="" element={<Home/>}/>
+        <Route path="/messages" element={<Messages/>}/>
+        <Route path="/profile" element={<Profile/>}/>
       </Route>
       <Route path="/login/callback" element={<LoginCallback loadingElement={<Loading/>}/>}/>
-      <Route path="/logout/callback" exact={true} element={<Home/>}/>
-      <Route path="/messages" element={<RequiredAuth/>}>
-        <Route path="" element={<Messages/>}/>
-      </Route>
-      <Route path="/profile" element={<RequiredAuth/>}>
-        <Route path="" element={<Profile/>}/>
-      </Route> 
+      <Route path="/logout/callback" exact={true} element={<Home/>}/> 
     </Routes>
   );
 };

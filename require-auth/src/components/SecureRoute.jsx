@@ -31,9 +31,8 @@ export const RequiredAuth = () => {
     }
   }, [oktaAuth, !!authState, authState?.isAuthenticated]);
 
-  if (!authState || !authState?.isAuthenticated) {
+    if (authState && authState?.isAuthenticated) {
+        return (<Outlet />);
+    }
     return (<Loading />);
-  }
-
-  return (<Outlet />);
 }
