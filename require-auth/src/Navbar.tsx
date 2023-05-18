@@ -33,10 +33,6 @@ const Navbar = () => {
 
   const login = async () => oktaAuth.signInWithRedirect();
   const logout = async () => oktaAuth.signOut();
-  const token = async () => oktaAuth.getAccessToken();
-
-  console.log('TOKEN::: '+token)
-  
   // const logout = async () => oktaAuth.tokenManager.clear(); // to clear token only
 
   if (!authState) {
