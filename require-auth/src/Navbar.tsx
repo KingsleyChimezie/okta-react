@@ -14,12 +14,29 @@ import { useOktaAuth } from '@okta/okta-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Icon, Image, Menu } from 'semantic-ui-react';
+import { useEffect, useState } from 'react';
 
 const Navbar = () => {
-  const { authState, oktaAuth } = useOktaAuth();
+    const { authState, oktaAuth } = useOktaAuth();
+    const [isAuth, setAuthStatus] = useState(false);
+
+    useEffect(() => {
+        if (!authState || !authState.isAuthenticated) {
+            // When user isn't authenticated, forget any user info
+            setAuthStatus(false);
+        }
+        if (authState?.isAuthenticated) {
+            // When user isn't authenticated, forget any user info
+            setAuthStatus(true);
+        }
+    }, [authState, oktaAuth]); // Update if authState changes
 
   const login = async () => oktaAuth.signInWithRedirect();
   const logout = async () => oktaAuth.signOut();
+  const token = async () => oktaAuth.getAccessToken();
+
+  console.log('TOKEN::: '+token)
+  
   // const logout = async () => oktaAuth.tokenManager.clear(); // to clear token only
 
   if (!authState) {
@@ -27,34 +44,38 @@ const Navbar = () => {
   }
 
   return (
-    <div>
-      <Menu fixed="top" inverted>
-        <Container>
-          <Menu.Item header>
-            <Image size="mini" src="/react.svg" />
-            &nbsp;
-            <Link to="/">Okta-React Sample Project</Link>
-          </Menu.Item>
-          {authState.isAuthenticated && (
-          <Menu.Item id="messages-button">
-            <Icon name="mail outline" />
-            <Link to="/messages">Messages</Link>
-          </Menu.Item>
-          )}
-          {authState.isAuthenticated && (
-            <Menu.Item id="profile-button">
-              <Link to="/profile">Profile</Link>
-            </Menu.Item>
-          )}
-          {authState.isAuthenticated && (
-            <Menu.Item id="logout-button" onClick={logout}>Logout</Menu.Item>
-          )}
-          {!authState || !authState.isAuthenticated && (
-            <Menu.Item onClick={login}>Login</Menu.Item>
-          )}
-        </Container>
-      </Menu>
-    </div>
+        <div>
+            { isAuth ?
+                <Menu fixed="top" inverted>
+                    <Container>
+                    <Menu.Item header>
+                        <Image size="mini" src="/react.svg" />
+                        &nbsp;
+                        <Link to="/">Okta-React Sample Project</Link>
+                    </Menu.Item>
+                    {authState.isAuthenticated && (
+                    <Menu.Item id="messages-button">
+                        <Icon name="mail outline" />
+                        <Link to="/messages">Messages</Link>
+                    </Menu.Item>
+                    )}
+                    {authState.isAuthenticated && (
+                        <Menu.Item id="profile-button">
+                        <Link to="/profile">Profile</Link>
+                        </Menu.Item>
+                    )}
+                    {authState.isAuthenticated && (
+                        <Menu.Item id="logout-button" onClick={logout}>Logout</Menu.Item>
+                    )}
+                    {!authState || !authState.isAuthenticated && (
+                        <Menu.Item onClick={login}>Login</Menu.Item>
+                    )}
+                    </Container>
+                </Menu>
+                :
+                null
+            }
+        </div>
   );
 };
 export default Navbar;
