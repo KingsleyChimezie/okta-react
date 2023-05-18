@@ -22,11 +22,11 @@ const Navbar = () => {
 
     useEffect(() => {
         if (!authState || !authState.isAuthenticated) {
-            // When user isn't authenticated, forget any user info
+            // When user isn't authenticated
             setAuthStatus(false);
         }
         if (authState?.isAuthenticated) {
-            // When user isn't authenticated, forget any user info
+            // When user is authenticated
             setAuthStatus(true);
         }
     }, [authState, oktaAuth]); // Update if authState changes
